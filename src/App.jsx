@@ -1,6 +1,9 @@
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
 import "./App.css";
+import Layout from "./components/Layout/Layout";
+import Routes from "./Routes";
 import { GlobalStyle } from "./styles/GlobalStyles";
 import { darkTheme, lightTheme } from "./styles/theme";
 
@@ -22,6 +25,11 @@ function App() {
             rel="stylesheet"
           />
         </Helmet>
+        <>
+          <Layout>
+            <Routes />
+          </Layout>
+        </>
       </ThemeProvider>
     </ThemeContext.Provider>
   );
