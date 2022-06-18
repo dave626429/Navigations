@@ -1,9 +1,9 @@
 # Navigation
 
-## Technologies Used
+  ## Technologies Used
 
-React
-Vite
-styled-component
-React-router-dom
-react-helmet
+    React
+    Vite
+    styled-component
+    React-router-dom
+    react-helmet
