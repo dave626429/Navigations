@@ -4,11 +4,32 @@ import styled from "styled-components";
 import { btnReset, v } from "../../styles/variables";
 
 export const SSideBar = styled.div`
-  width: ${v.sidebarWidth};
+  width: ${({ isOpen }) => (!isOpen ? "auto" : v.sidebarWidth)};
   background: ${({ theme }) => theme.bg};
   height: 100vh;
   padding: ${v.lgSpacing};
   position: relative;
+`;
+
+export const SSideBarButton = styled.button`
+  ${btnReset};
+  width: 32px;
+  height: 32px;
+  top: ${v.xxlSpacing};
+  right: ${({ isOpen }) => (isOpen ? "-16px" : "-40px")};
+  border-radius: 50%;
+  background: ${({ theme }) => theme.bg};
+  position: absolute;
+
+  box-shadow: 0 0 4px ${({ theme }) => theme.bg3},
+    0 0 7px ${({ theme }) => theme.bg};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  transform: ${({ isOpen }) => (!isOpen ? "rotate(180deg)" : "initial")};
 `;
 
 export const SLogo = styled.div`
@@ -53,7 +74,8 @@ export const SSearchIcon = styled.button`
 `;
 
 export const SLinkContainer = styled.div`
-  background: transparent;
+  background: ${({ theme, isActive }) =>
+    !isActive ? "transparent" : theme.bg3};
   border-radius: ${v.borderRadius};
   margin: 8px 0;
 
@@ -95,8 +117,6 @@ export const SLinkNotification = styled.div`
 
   margin-right: ${v.mdSpacing};
 `;
-
-// export const x=styled.
 
 export const STheme = styled.div`
   display: flex;

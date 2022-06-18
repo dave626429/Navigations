@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   SLink,
   SLinkContainer,
@@ -9,6 +9,7 @@ import {
   SSearch,
   SSearchIcon,
   SSideBar,
+  SSideBarButton,
   STheme,
   SThemeLabel,
   SThemeToggler,
@@ -21,33 +22,68 @@ import {
   AiOutlineHome,
   AiOutlineApartment,
   AiOutlineSetting,
+  AiOutlineLeft,
 } from "react-icons/ai";
 import { MdOutlineAnalytics, MdOutlineLogout } from "react-icons/md";
 import { BsPeople } from "react-icons/bs";
 import { ThemeContext } from "../../App";
+import { useLocation } from "react-router-dom";
 
 function SideBar() {
+  const searchBarRef = useRef(null);
+
   const { theme, setTheme } = useContext(ThemeContext);
+  const [sideBarOpen, setsideBarOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  const searchBarHandler = () => {
+    if (!sideBarOpen) {
+      setsideBarOpen(true);
+      searchBarRef.current.focus();
+    } else {
+    }
+  };
+
   return (
     <SSideBar>
+      <>
+        <SSideBarButton
+          isOpen={sideBarOpen}
+          onClick={() => setsideBarOpen((preState) => !preState)}
+        >
+          <AiOutlineLeft />
+        </SSideBarButton>
+      </>
       <SLogo>
         <img src={logoSVG} alt="logo" />
       </SLogo>
-      <SSearch>
+      <SSearch
+        onClick={searchBarHandler}
+        style={!sideBarOpen ? { width: "fit-content" } : {}}
+      >
         <SSearchIcon>
           <AiOutlineSearch />
         </SSearchIcon>
-        <input placeholder="Search" />
+        <input
+          placeholder="Search"
+          style={!sideBarOpen ? { width: "0", padding: "0" } : {}}
+          ref={searchBarRef}
+        />
       </SSearch>
+
       <SDivider />
 
       {linksArray.map(({ icon, label, to, notifications }) => (
-        <SLinkContainer key={label}>
-          <SLink to={to}>
+        <SLinkContainer key={label} isActive={pathname === to}>
+          <SLink to={to} style={!sideBarOpen ? { width: "fit-content" } : {}}>
             <SLinkIcon>{icon}</SLinkIcon>
-            <SLinkLabel>{label}</SLinkLabel>
-            {!!notifications && (
-              <SLinkNotification>{notifications}</SLinkNotification>
+            {sideBarOpen && (
+              <>
+                <SLinkLabel>{label}</SLinkLabel>
+                {!!notifications && (
+                  <SLinkNotification>{notifications}</SLinkNotification>
+                )}
+              </>
             )}
           </SLink>
         </SLinkContainer>
@@ -56,10 +92,10 @@ function SideBar() {
       <SDivider />
 
       {secondaryLinksArray.map(({ label, icon, to }) => (
-        <SLinkContainer key={label}>
-          <SLink to={to}>
+        <SLinkContainer key={label} isActive={pathname === to}>
+          <SLink to={to} style={!sideBarOpen ? { width: "fit-content" } : {}}>
             <SLinkIcon>{icon}</SLinkIcon>
-            <SLinkLabel>{label}</SLinkLabel>
+            {sideBarOpen && <SLinkLabel>{label}</SLinkLabel>}
           </SLink>
         </SLinkContainer>
       ))}
@@ -67,7 +103,7 @@ function SideBar() {
       <SDivider />
 
       <STheme>
-        <SThemeLabel>Dark Mode</SThemeLabel>
+        {sideBarOpen && <SThemeLabel>Dark Mode</SThemeLabel>}
         <SThemeToggler
           isActive={theme === "dark"}
           onClick={() =>
